@@ -1,15 +1,5 @@
 import Elysia, { t } from "elysia";
-import { ISSUES_SCHEMA } from "./issues";
 import { db } from "../../db";
-
-export const REPOSITORIES_SCHEMA = t.Object({
-  id: t.String(),
-  name: t.String(),
-  description: t.String(),
-  project_id: t.String(),
-  created_at: t.Date(),
-  updated_at: t.Date(),
-})
 
 const repositories = new Elysia({ prefix: '/repositories' })
   .get("/", () =>
@@ -19,19 +9,47 @@ const repositories = new Elysia({ prefix: '/repositories' })
       .execute(),
     {
       detail: { operationId: "getAllRepositories", tags: ["getAllRepositories"] },
-      response: t.Array(REPOSITORIES_SCHEMA)
+      response: t.Array(t.Object({
+        id: t.String(),
+        name: t.String(),
+        description: t.String(),
+        project_id: t.String(),
+        created_at: t.Date(),
+        updated_at: t.Date(),
+      }))
     }
   )
-  .get("/:id", ({ params: { id } }) =>
-    db
+  .get("/:id", async ({ params: { id } }) => {
+    const repository = await db
       .selectFrom("repositories")
       .selectAll()
       .where("id", "=", id)
-      .executeTakeFirstOrThrow(),
+      .executeTakeFirstOrThrow()
+    const project = await db
+      .selectFrom("projects")
+      .select(["id", "name"])
+      .where("id", "=", repository.project_id)
+      .executeTakeFirstOrThrow()
+    const issues = await db
+      .selectFrom("issues")
+      .select(["id", "name"])
+      .where("repository_id", "=", id)
+      .execute()
+    return { ...repository, project, issues }
+  },
     {
       detail: { operationId: "getRepositoryById", tags: ["getRepositoryById"] },
       params: t.Object({ id: t.String() }),
-      response: REPOSITORIES_SCHEMA
+      response: t.Object({
+        id: t.String(),
+        name: t.String(),
+        description: t.String(),
+        project: t.Object({ id: t.String(), name: t.String() }),
+        issues: t.Array(t.Object({ id: t.String(), name: t.String() })),
+        project_id: t.String(),
+        created_at: t.Date(),
+        updated_at: t.Date(),
+      })
     }
   )
   .post("/", ({ body }) =>

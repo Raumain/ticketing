@@ -19,6 +19,32 @@ export type GetRepositoryByIdPathParams = {
     */
     description: string;
     /**
+     * @type object
+    */
+    project: {
+        /**
+         * @type string
+        */
+        id: string;
+        /**
+         * @type string
+        */
+        name: string;
+    };
+    /**
+     * @type array
+    */
+    issues: {
+        /**
+         * @type string
+        */
+        id: string;
+        /**
+         * @type string
+        */
+        name: string;
+    }[];
+    /**
      * @type string
     */
     project_id: string;
@@ -39,6 +65,32 @@ export type GetRepositoryByIdPathParams = {
      * @type string
     */
     description: string;
+    /**
+     * @type object
+    */
+    project: {
+        /**
+         * @type string
+        */
+        id: string;
+        /**
+         * @type string
+        */
+        name: string;
+    };
+    /**
+     * @type array
+    */
+    issues: {
+        /**
+         * @type string
+        */
+        id: string;
+        /**
+         * @type string
+        */
+        name: string;
+    }[];
     /**
      * @type string
     */

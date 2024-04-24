@@ -53,7 +53,7 @@ bun dev
 > You're good to go ! ✨
 
 ## TODOs
-- [ ] Display infos about the linked project/repository/issues on [item]_$id [![frontend](https://img.shields.io/badge/frontend-blue?style=plastic)](https://github.com/Raumain/ticketing/tree/master/frontend) [![backend](https://img.shields.io/badge/backend-yellow?style=plastic)](https://github.com/Raumain/ticketing/tree/master/backend)
+- [x] Display infos about the linked project/repository/issues on [item]_$id [![frontend](https://img.shields.io/badge/frontend-blue?style=plastic)](https://github.com/Raumain/ticketing/tree/master/frontend) [![backend](https://img.shields.io/badge/backend-yellow?style=plastic)](https://github.com/Raumain/ticketing/tree/master/backend)
 - [ ] Implement GithubAPI request to get real infos [![backend](https://img.shields.io/badge/backend-yellow?style=plastic)](https://github.com/Raumain/ticketing/tree/master/backend)
 - [ ] Create a friendly UI because my eyes are bleeding rn
 - [ ] Update the todos list 

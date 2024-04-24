@@ -1,14 +1,6 @@
 import Elysia, { t } from "elysia";
 import { db } from "../../db";
 
-const PROJECTS_SCHEMA = t.Object({
-  id: t.String(),
-  name: t.String(),
-  description: t.String(),
-  repositories: t.Array(t.String()),
-  created_at: t.Date(),
-  updated_at: t.Date(),
-})
 const projects = new Elysia({ prefix: '/projects' })
   .get("/", async () => {
     const projects = await db
@@ -20,7 +12,13 @@ const projects = new Elysia({ prefix: '/projects' })
   },
     {
       detail: { operationId: "getAllProjects", tags: ["getAllProjects"] },
-      response: t.Array(t.Omit(PROJECTS_SCHEMA, ["repositories"]))
+      response: t.Array(t.Object({
+        id: t.String(),
+        name: t.String(),
+        description: t.String(),
+        created_at: t.Date(),
+        updated_at: t.Date(),
+      }))
     }
   )
   .get("/:id", async ({ params: { id } }) => {
@@ -31,15 +29,22 @@ const projects = new Elysia({ prefix: '/projects' })
       .executeTakeFirstOrThrow()
     const repositories = await db
       .selectFrom("repositories")
-      .select("name")
+      .select(["id", "name"])
       .where("repositories.project_id", "=", id)
       .execute()
-    return { ...project, repositories: repositories.map(r => r.name) }
+    return { ...project, repositories: repositories.map(r => ({ id: r.id, name: r.name })) }
   },
     {
       detail: { operationId: "getProjectById", tags: ["getProjectById"] },
       params: t.Object({ id: t.String() }),
-      response: PROJECTS_SCHEMA
+      response: t.Object({
+        id: t.String(),
+        name: t.String(),
+        description: t.String(),
+        repositories: t.Array(t.Object({ id: t.String(), name: t.String() })),
+        created_at: t.Date(),
+        updated_at: t.Date(),
+      })
     }
   )
   .post("/", ({ body }) =>

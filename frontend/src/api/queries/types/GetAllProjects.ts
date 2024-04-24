@@ -11,15 +11,6 @@ export type GetAllProjects200 = {
      * @type string
     */
     description: string;
-    /**
-     * @type array
-    */
-    repositories: {
-        /**
-         * @type string
-        */
-        name: string;
-    }[];
     created_at: (string | string);
     updated_at: (string | string);
 }[];
@@ -37,15 +28,6 @@ export type GetAllProjects200 = {
      * @type string
     */
     description: string;
-    /**
-     * @type array
-    */
-    repositories: {
-        /**
-         * @type string
-        */
-        name: string;
-    }[];
     created_at: (string | string);
     updated_at: (string | string);
 }[];

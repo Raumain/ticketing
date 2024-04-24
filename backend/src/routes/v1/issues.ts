@@ -1,15 +1,6 @@
 import Elysia, { t } from "elysia";
 import { db } from "../../db";
 
-export const ISSUES_SCHEMA = t.Object({
-  id: t.String(),
-  repository_id: t.String(),
-  name: t.String(),
-  description: t.String(),
-  created_at: t.Date(),
-  updated_at: t.Date(),
-})
-
 const issues = new Elysia({ prefix: '/issues' })
   .get("/", () =>
     db
@@ -18,19 +9,44 @@ const issues = new Elysia({ prefix: '/issues' })
       .execute(),
     {
       detail: { operationId: "getAllIssues", tags: ["getAllIssues"] },
-      response: t.Array(ISSUES_SCHEMA)
+      response: t.Array(
+        t.Object({
+          id: t.String(),
+          repository_id: t.String(),
+          name: t.String(),
+          description: t.String(),
+          created_at: t.Date(),
+          updated_at: t.Date(),
+        })
+      )
     }
   )
-  .get("/:id", ({ params: { id } }) =>
-    db
-      .selectFrom("issues")
-      .selectAll()
-      .where("id", "=", id)
-      .executeTakeFirstOrThrow(),
+  .get("/:id", ({ params: { id } }) => db
+    .selectFrom("issues")
+    .innerJoin("repositories", "issues.repository_id", "repositories.id")
+    .select([
+      "issues.id",
+      "issues.repository_id",
+      "issues.name",
+      "issues.description",
+      "issues.created_at",
+      "issues.updated_at",
+      "repositories.name as repository_name"
+    ])
+    .where("issues.id", "=", id)
+    .executeTakeFirstOrThrow(),
     {
       detail: { operationId: "getIssueById", tags: ["getIssueById"] },
       params: t.Object({ id: t.String() }),
-      response: ISSUES_SCHEMA
+      response: t.Object({
+        id: t.String(),
+        repository_id: t.String(),
+        name: t.String(),
+        description: t.String(),
+        repository_name: t.String(),
+        created_at: t.Date(),
+        updated_at: t.Date(),
+      })
     }
   )
   .post("/", ({ body }) =>
