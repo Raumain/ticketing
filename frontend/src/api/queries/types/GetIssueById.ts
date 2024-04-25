@@ -22,12 +22,12 @@ export type GetIssueByIdPathParams = {
      * @type string
     */
     description: string;
-    created_at: (string | string);
-    updated_at: (string | string);
     /**
      * @type string
     */
     repository_name: string;
+    created_at: (string | string);
+    updated_at: (string | string);
 };
 
  export type GetIssueByIdQueryResponse = {
@@ -47,12 +47,12 @@ export type GetIssueByIdPathParams = {
      * @type string
     */
     description: string;
-    created_at: (string | string);
-    updated_at: (string | string);
     /**
      * @type string
     */
     repository_name: string;
+    created_at: (string | string);
+    updated_at: (string | string);
 };
 
  export type GetIssueByIdQuery = {

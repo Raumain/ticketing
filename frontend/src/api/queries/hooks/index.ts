@@ -11,6 +11,7 @@ export * from "./useGetProjectById";
 export * from "./useGetRepositoryById";
 export * from "./usePostApiV1User";
 export * from "./usePostApiV1UserGithubToken";
+export * from "./usePostGithubToken";
 export * from "./usePostIssue";
 export * from "./usePostProject";
 export * from "./usePostRepository";
